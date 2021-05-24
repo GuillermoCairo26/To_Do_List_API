@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { getRepository } from 'typeorm'  // getRepository"  traer una tabla de la base de datos asociada al objeto
 import { Users } from './entities/Users'
 import { Exception } from './utils'
+import { Tareas } from './entities/Tareas'
 
 export const createUser = async (req: Request, res:Response): Promise<Response> =>{
 
@@ -24,4 +25,25 @@ export const createUser = async (req: Request, res:Response): Promise<Response> 
 export const getUsers = async (req: Request, res: Response): Promise<Response> =>{
 		const users = await getRepository(Users).find();
 		return res.json(users);
+}
+
+export const getUser = async (req: Request, res: Response): Promise<Response> =>{
+		const users = await getRepository(Users).findOne(req.params.id);
+		return res.json(users);
+}
+
+export const createTarea = async (req: Request, res: Response): Promise<Response> =>{
+        if(!req.body.descripcion_tarea)throw new Exception("Escriba una descripción, por favor")
+        const usersTareas = getRepository(Users)
+        const userTarea = await usersTareas.findOne(req.params.id)
+        if(userTarea) {
+            let tarea = new Tareas()
+            tarea.descripcion_tarea = req.body.descripcion_tarea
+            tarea.estado_tarea = false
+            /* Le asignamos el usuario al que le pertenece la tarea   */
+            tarea.users = userTarea
+            const results = await getRepository(Tareas).save(tarea)
+            return res.json(results);
+        }
+		return res.json("Usuario no encontrado");
 }

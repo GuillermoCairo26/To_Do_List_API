@@ -36,10 +36,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.getUsers = exports.createUser = void 0;
+exports.createTarea = exports.getUser = exports.getUsers = exports.createUser = void 0;
 var typeorm_1 = require("typeorm"); // getRepository"  traer una tabla de la base de datos asociada al objeto
 var Users_1 = require("./entities/Users");
 var utils_1 = require("./utils");
+var Tareas_1 = require("./entities/Tareas");
 var createUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var userRepo, user, newUser, results;
     return __generator(this, function (_a) {
@@ -81,3 +82,41 @@ var getUsers = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
     });
 }); };
 exports.getUsers = getUsers;
+var getUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var users;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, typeorm_1.getRepository(Users_1.Users).findOne(req.params.id)];
+            case 1:
+                users = _a.sent();
+                return [2 /*return*/, res.json(users)];
+        }
+    });
+}); };
+exports.getUser = getUser;
+var createTarea = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var usersTareas, userTarea, tarea, results;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                if (!req.body.descripcion_tarea)
+                    throw new utils_1.Exception("Escriba una descripción, por favor");
+                usersTareas = typeorm_1.getRepository(Users_1.Users);
+                return [4 /*yield*/, usersTareas.findOne(req.params.id)];
+            case 1:
+                userTarea = _a.sent();
+                if (!userTarea) return [3 /*break*/, 3];
+                tarea = new Tareas_1.Tareas();
+                tarea.descripcion_tarea = req.body.descripcion_tarea;
+                tarea.estado_tarea = false;
+                /* Le asignamos el usuario al que le pertenece la tarea   */
+                tarea.users = userTarea;
+                return [4 /*yield*/, typeorm_1.getRepository(Tareas_1.Tareas).save(tarea)];
+            case 2:
+                results = _a.sent();
+                return [2 /*return*/, res.json(results)];
+            case 3: return [2 /*return*/, res.json("Usuario no encontrado")];
+        }
+    });
+}); };
+exports.createTarea = createTarea;
