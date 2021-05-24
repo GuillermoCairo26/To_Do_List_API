@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.createTarea = exports.getUser = exports.getUsers = exports.createUser = void 0;
+exports.createTarea = exports.getUserTareas = exports.getUser = exports.getUsers = exports.createUser = void 0;
 var typeorm_1 = require("typeorm"); // getRepository"  traer una tabla de la base de datos asociada al objeto
 var Users_1 = require("./entities/Users");
 var utils_1 = require("./utils");
@@ -94,6 +94,23 @@ var getUser = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
     });
 }); };
 exports.getUser = getUser;
+var getUserTareas = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var users, results;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, typeorm_1.getRepository(Users_1.Users).findOne(req.params.id)];
+            case 1:
+                users = _a.sent();
+                if (!!users) return [3 /*break*/, 2];
+                return [2 /*return*/, res.json({ "message": "El usuario no existe" })];
+            case 2: return [4 /*yield*/, typeorm_1.getRepository(Tareas_1.Tareas).find({ where: { users: users } })];
+            case 3:
+                results = _a.sent();
+                return [2 /*return*/, res.json(results)];
+        }
+    });
+}); };
+exports.getUserTareas = getUserTareas;
 var createTarea = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var usersTareas, userTarea, tarea, results;
     return __generator(this, function (_a) {

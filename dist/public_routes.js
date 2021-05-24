@@ -34,4 +34,5 @@ var router = express_1.Router();
 router.post('/user', utils_1.safe(actions.createUser));
 router.get('/user/:id', utils_1.safe(actions.getUser));
 router.post('/tareas/:id', utils_1.safe(actions.createTarea));
+router.get('/tareas/:id', utils_1.safe(actions.getUserTareas));
 exports["default"] = router;

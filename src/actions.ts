@@ -28,8 +28,18 @@ export const getUsers = async (req: Request, res: Response): Promise<Response> =
 }
 
 export const getUser = async (req: Request, res: Response): Promise<Response> =>{
-		const users = await getRepository(Users).findOne(req.params.id);
-		return res.json(users);
+        const users = await getRepository(Users).findOne(req.params.id);
+            return res.json(users)
+}
+
+export const getUserTareas = async (req: Request, res: Response): Promise<Response> =>{
+        const users = await getRepository(Users).findOne(req.params.id);
+        if(!users) {
+            return res.json({"message":"El usuario no existe"})
+        }else{
+            const results = await getRepository(Tareas).find({where: {users:users}})
+            return res.json(results)
+        }
 }
 
 export const createTarea = async (req: Request, res: Response): Promise<Response> =>{

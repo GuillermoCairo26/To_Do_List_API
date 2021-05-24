@@ -16,6 +16,7 @@ const router = Router();
 router.post('/user', safe(actions.createUser));
 router.get('/user/:id', safe(actions.getUser));
 router.post('/tareas/:id', safe(actions.createTarea));
+router.get('/tareas/:id', safe(actions.getUserTareas));
 
 
 export default router;
