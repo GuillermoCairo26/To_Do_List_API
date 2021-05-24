@@ -57,3 +57,25 @@ export const createTarea = async (req: Request, res: Response): Promise<Response
         }
 		return res.json("Usuario no encontrado");
 }
+
+export const deleteUser = async (req: Request, res: Response): Promise<Response> =>{
+        const users = await getRepository(Users).findOne(req.params.id);
+        if(!users) {
+            return res.json("Usuario no existe");
+        }else{
+            const result = await getRepository(Tareas).delete({users:users})
+            await getRepository(Users).delete(users)
+            return res.json(result);
+        }	
+}
+
+export const updateTarea = async (req: Request, res: Response): Promise<Response> =>{
+        const tarea = await getRepository(Tareas).findOne(req.params.id);
+        if(!tarea) {
+            return res.json("Tarea no existe");
+        }else{
+            getRepository(Tareas).merge(tarea,req.body)
+            const result = await getRepository(Tareas).save(tarea)
+            return res.json(result)
+        }   	
+}

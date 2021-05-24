@@ -17,6 +17,8 @@ router.post('/user', safe(actions.createUser));
 router.get('/user/:id', safe(actions.getUser));
 router.post('/tareas/:id', safe(actions.createTarea));
 router.get('/tareas/:id', safe(actions.getUserTareas));
+router.delete('/user/:id', safe(actions.deleteUser));
+router.put('/tareas/:id', safe(actions.updateTarea));
 
 
 export default router;
